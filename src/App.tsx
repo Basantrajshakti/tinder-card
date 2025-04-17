@@ -1,5 +1,8 @@
+import ProductCard from "./components/ProductCard";
+import { productData } from "./constants/product";
+
 const App = () => {
-  return <h1 className="text-xl font-bold underline">Hello world!</h1>;
+  return <ProductCard product={productData[0]} />;
 };
 
 export default App;
