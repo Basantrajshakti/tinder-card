@@ -1,6 +1,6 @@
-import { Product } from "../types";
+import { Product, SwipeDirection } from "../types";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({ product, swipeDirection }: { product: Product, swipeDirection: SwipeDirection | null }) {
   return (
     <div className="bg-white rounded-3xl shadow-xl w-[90vw] sm:w-[85vw] md:w-[70vw] lg:w-[50vw] max-w-md overflow-hidden transition-all duration-300 border border-gray-200">
       <img src={product.imageUrl} alt={product.name} className="w-full h-96 object-cover" />

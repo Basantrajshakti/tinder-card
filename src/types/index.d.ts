@@ -15,4 +15,6 @@ export interface SwipeableCardProps {
   onSwipe: (dir: SwipeDirection, id: number) => void;
   setSwipeDirection: Dispatch<SetStateAction<SwipeDirection | null>>;
   swipeDirection: SwipeDirection | null;
+  isTop: boolean;
+  index: number;
 }
