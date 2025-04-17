@@ -4,6 +4,12 @@
 
 ---
 
+## 🎥 Walkthrough Demo
+
+[Watch the Loom walkthrough video here](https://www.loom.com/share/47d4247e39694d35ae0e8c2e6a51eb59?sid=8054b9ee-8cc7-467e-8ff4-635e00f4e90e)
+
+---
+
 ## 📁 Project Structure
 
 ```
