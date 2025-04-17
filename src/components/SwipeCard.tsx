@@ -9,12 +9,16 @@ const SwipeCard: React.FC<SwipeableCardProps> = ({ product, onSwipe, setSwipeDir
   const pos = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    const card = cardRef.current;
+    const card = cardRef?.current;
     if (!card) return;
 
     const handleTouchStart = (e: TouchEvent) => {
       const touch = e.touches[0];
       start.current = { x: touch.clientX, y: touch.clientY };
+    };
+
+    const handleDragStart = (e: DragEvent) => {
+      start.current = { x: e.clientX, y: e.clientY };
     };
 
     const handleTouchMove = (e: TouchEvent) => {
@@ -33,24 +37,43 @@ const SwipeCard: React.FC<SwipeableCardProps> = ({ product, onSwipe, setSwipeDir
       else setSwipeDirection(null);
     };
 
+    const handleDrag = (e: DragEvent) => {
+      if (e.clientX === 0 && e.clientY === 0) return;
+
+      pos.current = {
+        x: e.clientX - start.current.x,
+        y: e.clientY - start.current.y,
+      };
+
+      const { x, y } = pos.current;
+      gsap.to(card, { x, y, rotation: x / 20 });
+
+      if (x > 40) setSwipeDirection("right");
+      else if (x < -40) setSwipeDirection("left");
+      else if (y < -40) setSwipeDirection("up");
+      else setSwipeDirection(null);
+    };
+
     const handleTouchEnd = () => {
       const { x, y } = pos.current;
       const threshold = 150;
 
       if (x > threshold) {
         gsap.to(card, {
-          x: window.innerWidth,
+          x: 300,
           opacity: 0,
           duration: 0.3,
           scale: 0.7,
+          skewX: 2,
           onComplete: () => onSwipe("right", product.id),
         });
       } else if (x < -threshold) {
         gsap.to(card, {
-          x: -window.innerWidth,
+          x: -300,
           opacity: 0,
           duration: 0.3,
           scale: 0.7,
+          skewX: 2,
           onComplete: () => onSwipe("left", product.id),
         });
       } else if (y < -threshold) {
@@ -59,6 +82,7 @@ const SwipeCard: React.FC<SwipeableCardProps> = ({ product, onSwipe, setSwipeDir
           opacity: 0,
           duration: 0.3,
           scale: 0.7,
+          skewX: 2,
           onComplete: () => onSwipe("up", product.id),
         });
       } else {
@@ -67,14 +91,26 @@ const SwipeCard: React.FC<SwipeableCardProps> = ({ product, onSwipe, setSwipeDir
       }
     };
 
+    const handleDragEnd = () => {
+      handleTouchEnd();
+    };
+
     card.addEventListener("touchstart", handleTouchStart);
     card.addEventListener("touchmove", handleTouchMove);
     card.addEventListener("touchend", handleTouchEnd);
+
+    card.addEventListener("dragstart", handleDragStart);
+    card.addEventListener("drag", handleDrag);
+    card.addEventListener("dragend", handleDragEnd);
 
     return () => {
       card.removeEventListener("touchstart", handleTouchStart);
       card.removeEventListener("touchmove", handleTouchMove);
       card.removeEventListener("touchend", handleTouchEnd);
+
+      card.removeEventListener("dragstart", handleDragStart);
+      card.removeEventListener("drag", handleDrag);
+      card.removeEventListener("dragend", handleDragEnd);
     };
   }, [product, onSwipe, setSwipeDirection]);
 
