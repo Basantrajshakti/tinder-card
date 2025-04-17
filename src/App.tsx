@@ -1,8 +1,8 @@
-import ProductCard from "./components/ProductCard";
+import SwipeDeck from "./components/SwipeDeck";
 import { productData } from "./constants/product";
 
 const App = () => {
-  return <ProductCard product={productData[0]} />;
+  return <SwipeDeck products={productData} />;
 };
 
 export default App;
